@@ -19,12 +19,18 @@
             }
         }
 
+        interface Viewable {
+            void viewDatabase() throws SQLException;
+
+        }
+
         // Class for FYPL database operations
-        class FYPLDatabaseOperation extends DatabaseOperation {
+        class FYPLDatabaseOperation extends DatabaseOperation implements Viewable {
             public FYPLDatabaseOperation(String url, String username, String password) throws SQLException {
                 // Constructor for fypldatabase, takes url of database, username , and password, all of which is required for MySQL.
                 super(url, username, password);
             }
+           @Override
             public void viewDatabase() throws SQLException {
                 // Create object used for MySQL queries, insensitive so it can be moved forwards and backwards along the
                 // database, read_only to only allow for editing of the database.
@@ -670,12 +676,13 @@
             }
         }
 
-        class EventDatabaseOperation extends DatabaseOperation {
+        class EventDatabaseOperation extends DatabaseOperation implements Viewable {
             public EventDatabaseOperation(String url, String username, String password) throws SQLException {
                 // Constructor for eventdatabaseoperation, takes url of database, username , and password, all of which is required for MySQL.
                 super(url, username, password);
             }
-            public void viewEventDatabase() throws SQLException {
+           @Override
+            public void viewDatabase() throws SQLException{
                 // Create object used for MySQL queries, insensitive so it can be moved forwards and backwards along the
                 // database, read_only to only allow for editing of the database.
                 statement = connection.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
@@ -1105,7 +1112,7 @@
                                 punishmentsDatabaseOperation.removePunishment();
                                 break;
                             case 8:
-                                eventDatabaseOperation.viewEventDatabase();
+                                eventDatabaseOperation.viewDatabase();
                                 break;
                             case 9:
                                 eventDatabaseOperation.addevent();
